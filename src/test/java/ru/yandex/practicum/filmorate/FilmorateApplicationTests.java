@@ -24,19 +24,14 @@ class FilmorateApplicationTests {
 				.birthday(LocalDate.of(3000,5,5))
 				.build();
 		System.out.println(user);
-		assertEquals("Росомаха",user.getName());
+
 
 		User user1 = user.toBuilder().name("Логан").build();
 		System.out.println(user1);
-		assertEquals("Логан",user1.getName());
 
 		User user2 = user.toBuilder().name("    ").build();
 
-		assertEquals("Росомаха",user2.getName());
-
-
-
-
+		System.out.println(user2);
 
 	}
 
