@@ -1,8 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.*;
 import lombok.*;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 @Setter
 @Getter
@@ -12,7 +12,7 @@ public class User {
     @Builder.Default
     private int id=0;
 
-    @NotNull
+    @NonNull
     @Email
     @NotBlank
     @NotEmpty
