@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @RestController
 public class FilmController {
@@ -28,6 +29,7 @@ public class FilmController {
     @PutMapping("/films")
     public Film updateFilm(@RequestBody @Valid Film film) {
         int idFilm = film.getId();
+
         if (filmMap.containsKey(idFilm)) {
             filmMap.remove(idFilm);
             filmMap.put(idFilm,film);

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Slf4j
 @RestController
 public class UserController {
@@ -28,6 +29,7 @@ public class UserController {
     @PutMapping("/users")
     public User updateUser(@RequestBody @Valid User user) {
         int idUser = user.getId();
+
         if (userMap.containsKey(idUser)) {
             userMap.remove(idUser);
             userMap.put(idUser,user);
@@ -41,11 +43,13 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getUsers() {
         log.info("Отправлен список пользователей, в количестве " +userMap.size());
+
         return new ArrayList<>(userMap.values());
     }
 
     private User noName(User user) {
         String name = user.getName();
+        
         if(name == null  || name.isBlank() || name.isEmpty()) {
             return user.toBuilder().name(user.getLogin()).build();
         }
