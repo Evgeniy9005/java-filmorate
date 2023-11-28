@@ -1,16 +1,16 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
-
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+
 @Setter
 @Getter
 @ToString
 @Builder(toBuilder = true)
 public class User {
     @Builder.Default
-    private int id=0;
+    private int id = 0;
 
     @NonNull
     @Email

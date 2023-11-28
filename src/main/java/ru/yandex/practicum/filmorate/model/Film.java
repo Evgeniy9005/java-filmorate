@@ -17,13 +17,13 @@ import javax.validation.constraints.Size;
 @Builder(toBuilder = true)
 public class Film {
     @Builder.Default
-    private int id=0;
+    private int id = 0;
 
     @NotNull
     @NotBlank
     private String  name;
 
-    @Size(max=200)
+    @Size(max = 200)
     private String description;
     @MinDate
     private LocalDate releaseDate;
