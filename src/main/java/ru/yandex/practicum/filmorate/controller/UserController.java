@@ -50,9 +50,10 @@ public class UserController {
     private User noName(User user) {
         String name = user.getName();
 
-        if(name == null  || name.isBlank() || name.isEmpty()) {
+        if(name == null  || name.isBlank() || name.isEmpty()){
             return user.toBuilder().name(user.getLogin()).build();
         }
+
         return user;
     }
 }
