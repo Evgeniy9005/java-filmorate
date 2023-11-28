@@ -4,9 +4,7 @@ import java.time.LocalDate;
 
 import lombok.Data;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.annotations.MinDate;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
