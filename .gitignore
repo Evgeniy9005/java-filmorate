@@ -32,10 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
-.src/
-mvnw
-mvnw.cmd
+.mvn/
 *.class
 *.jar
 *.DS_Store
-.mvn
