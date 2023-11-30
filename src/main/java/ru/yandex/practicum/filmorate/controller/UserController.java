@@ -32,7 +32,7 @@ public class UserController {
 
         if (userMap.containsKey(idUser)) {
             userMap.remove(idUser);
-            userMap.put(idUser,user);
+            userMap.put(idUser,noName(user));
             log.info("Обновлен пользователь= " + user);
             return userMap.get(idUser);
         } else {

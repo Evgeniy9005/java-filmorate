@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @ToString
+@EqualsAndHashCode
 @Builder(toBuilder = true)
 public class User {
     @Builder.Default
