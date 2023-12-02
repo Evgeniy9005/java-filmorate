@@ -13,11 +13,8 @@ class FilmTest {
     Film film1;
     @BeforeEach
     void start() {
-        film = new Film(1
-                ,"Фильм"
-                ,"Описание"
-                , LocalDate.of(2000,1,1)
-                ,100);
+        film = new Film(1,"Фильм", "Описание",
+                LocalDate.of(2000,1,1),100);
 
         film1 = Film.builder()
                 .id(1)

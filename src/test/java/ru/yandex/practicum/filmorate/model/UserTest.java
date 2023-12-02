@@ -12,11 +12,8 @@ class UserTest {
     User user1;
     @BeforeEach
     void start() {
-        user = new User(1
-                , "email"
-                , "login"
-                , "name"
-                , LocalDate.of(1999, 3, 3));
+        user = new User(1, "email", "login", "name",
+                LocalDate.of(1999, 3, 3));
 
         user1 = User
                 .builder()

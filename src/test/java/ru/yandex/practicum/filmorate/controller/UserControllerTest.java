@@ -88,8 +88,7 @@ class UserControllerTest {
 
         @Test
         void exceptionTest() {
-            assertEquals("Status expected:<404> but was:<200>"
-                    , assertThrows(AssertionError.class, () ->
+            assertEquals("Status expected:<404> but was:<200>", assertThrows(AssertionError.class, () ->
                             mockMvc.perform(put("/users").content(objectMapper.writeValueAsString(user))
                                             .contentType(MediaType.APPLICATION_JSON))
                                     .andExpect(status().isNotFound())

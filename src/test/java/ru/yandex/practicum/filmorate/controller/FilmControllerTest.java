@@ -63,8 +63,8 @@ class FilmControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.name").value("Изменненное имя фильма"))
-                .andExpect(jsonPath("$.releaseDate"
-                        ,Matchers.is(LocalDate.of(2000,10,1).toString())))
+                .andExpect(jsonPath("$.releaseDate",
+                        Matchers.is(LocalDate.of(2000,10,1).toString())))
                 .andExpect(jsonPath("$.duration").value("100"))
                 .andExpect(jsonPath("$.description").value("Описание"));
 
@@ -88,8 +88,7 @@ class FilmControllerTest {
     @Test
     void exceptionTest() {
 
-        assertEquals("Status expected:<404> but was:<200>"
-                , assertThrows(AssertionError.class, () ->
+        assertEquals("Status expected:<404> but was:<200>", assertThrows(AssertionError.class, () ->
                         mockMvc.perform(put("/films").content(objectMapper.writeValueAsString(film))
                                         .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isNotFound())
