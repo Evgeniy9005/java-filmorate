@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserTest {
     User user;
     User user1;
-    
+
     @BeforeEach
     void start() {
         user = new User(1, "email", "login", "name",
@@ -80,8 +80,7 @@ class UserTest {
         user.setBirthday(LocalDate.of(1998, 4, 30));
         assertEquals("1998-04-30",user.getBirthday().toString());
     }
-
-
+    
     @Test
     void testEquals() {
         assertTrue(user.equals(user1));
@@ -91,6 +90,7 @@ class UserTest {
     void testHashCode() {
         assertEquals(user.hashCode(),user1.hashCode());
     }
+
     @Test
     void testToString() {
         assertEquals(user.toString(),user1.toString());
