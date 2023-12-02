@@ -26,7 +26,6 @@ class UserTest {
                 .name("name")
                 .birthday(LocalDate.of(1999, 3, 3))
                 .build();
-
     }
 
     @Test

@@ -5,23 +5,20 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
 
@@ -29,7 +26,6 @@ class UserControllerTest {
         private MockMvc mockMvc;
         @Autowired
         private ObjectMapper objectMapper;
-
 
         private User user = User.builder()
                 .id(1)
@@ -104,4 +100,28 @@ class UserControllerTest {
                     ).getMessage());
 
         }
+
+    void validUser(User user) throws Exception {
+        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void validTest() throws Exception {
+        //проверка валидации поля email
+        validUser(user.toBuilder().email("").build());
+        validUser(user.toBuilder().email("    ").build());
+        validUser(user.toBuilder().email("email").build());
+        validUser(user.toBuilder().email(null).build());
+
+        //проверка валидации поля lodin
+        validUser(user.toBuilder().login("").build());
+        validUser(user.toBuilder().login("    ").build());
+        validUser(user.toBuilder().login(null).build());
+
+        //проверка валидации поля birthday
+        validUser(user.toBuilder().birthday(LocalDate.of(3000,1,1)).build());
+        validUser(user.toBuilder().birthday(null).build());
+    }
 }

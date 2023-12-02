@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.Builder;
 import ru.yandex.practicum.filmorate.annotations.MinDate;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
@@ -17,14 +16,15 @@ public class Film {
     @Builder.Default
     private int id = 0;
 
-    @NotNull
     @NotBlank
     private String  name;
 
     @Size(max = 200)
     private String description;
+
     @MinDate
     private LocalDate releaseDate;
+
     @Positive
     private int duration;
 }

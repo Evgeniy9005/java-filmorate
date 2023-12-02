@@ -5,7 +5,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@WebMvcTest(FilmController.class)
+@SpringBootTest
 @AutoConfigureMockMvc
 class FilmControllerTest {
 
@@ -99,5 +99,34 @@ class FilmControllerTest {
                                         .equals(ValidationException.class))
                 ).getMessage());
 
+    }
+
+    void validFilm(Film film) throws Exception {
+        mockMvc.perform(post("/films").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(film)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void validTest() throws Exception {
+
+        //проверка валидации поля name
+        validFilm(film.toBuilder().name("").build());
+        validFilm(film.toBuilder().name("    ").build());
+        validFilm(film.toBuilder().name(null).build());
+
+        //проверка валидации поля description
+        validFilm(film.toBuilder().description("123456789_123456789_123456789_123456789_123456789_"
+                        + "123456789_123456789_123456789_123456789_123456789_"
+                        + "123456789_123456789_123456789_123456789_123456789_"
+                        + "123456789_123456789_123456789_123456789_123456789_"
+                        + "1")
+                .build());
+
+        //проверка валидации поля releaseDate
+        validFilm(film.toBuilder().releaseDate(LocalDate.of(1894,1,1)).build());
+
+        //проверка валидации поля duration
+        validFilm(film.toBuilder().duration(-1).build());
     }
 }
