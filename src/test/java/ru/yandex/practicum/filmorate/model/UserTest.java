@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserTest {
     User user;
     User user1;
+    
     @BeforeEach
     void start() {
         user = new User(1, "email", "login", "name",

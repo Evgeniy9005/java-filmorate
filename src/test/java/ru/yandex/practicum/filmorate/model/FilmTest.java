@@ -11,6 +11,7 @@ class FilmTest {
 
     Film film;
     Film film1;
+
     @BeforeEach
     void start() {
         film = new Film(1,"Фильм", "Описание",
