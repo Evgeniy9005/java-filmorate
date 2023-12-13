@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,14 +15,17 @@ class FilmTest {
 
     @BeforeEach
     void start() {
-        film = new Film(1,"Фильм", "Описание",
-                LocalDate.of(2000,1,1),100);
+    film = new Film(1,"Фильм",
+            "Описание",
+            LocalDate.of(2000,1,1),
+            100,
+            Set.of());
 
-        film1 = Film.builder()
+        film1 =  Film.builder()
                 .id(1)
                 .name("Фильм")
                 .description("Описание")
-                .releaseDate(LocalDate.of(2000,1,1))
+                .releaseDate(LocalDate.of(2000, 1, 1))
                 .duration(100)
                 .build();
     }
@@ -53,32 +57,13 @@ class FilmTest {
 
     @Test
     void setId() {
-        film.setId(2);
-        assertEquals(2,film.getId());
+      //  film.setId(2);
+        assertEquals(1,film.getId());
     }
 
     @Test
     void setName() {
-        film.setName("Новый фильм");
-        assertEquals("Новый фильм",film.getName());
-    }
-
-    @Test
-    void setDescription() {
-        film.setDescription("Новое описание");
-        assertEquals("Новое описание",film.getDescription());
-    }
-
-    @Test
-    void setReleaseDate() {
-        film.setReleaseDate(LocalDate.of(2002,2,2));
-        assertEquals("2002-02-02",film.getReleaseDate().toString());
-    }
-
-    @Test
-    void setDuration() {
-        film.setDuration(111);
-        assertEquals(111,film.getDuration());
+        assertEquals("Новый фильм",film.toBuilder().name("Новый фильм").build().getName());
     }
 
     @Test

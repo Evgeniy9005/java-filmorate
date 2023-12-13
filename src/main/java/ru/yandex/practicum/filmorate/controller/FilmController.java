@@ -20,8 +20,7 @@ public class FilmController {
     @PostMapping("/films")
     public Film createFilm(@Valid @RequestBody Film film) {
         id++;
-        film.setId(id);
-        filmMap.put(id,film);
+        filmMap.put(id,film.toBuilder().id(id).build());
         log.info("Добавлен фильм= " + film);
     return filmMap.get(id);
     }
