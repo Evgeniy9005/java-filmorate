@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,7 +55,6 @@ class FilmTest {
 
     @Test
     void setId() {
-      //  film.setId(2);
         assertEquals(1,film.getId());
     }
 
