@@ -8,10 +8,7 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -19,10 +16,10 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
-
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
 
     @PostMapping()
     public User createUser(@Valid @RequestBody User user) {
@@ -41,26 +38,44 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @PutMapping("/{id}/friends/{friendId}") //PUT /users/{id}/friends/{friendId} — добавление в друзья.
+    @GetMapping("/{id}")
+    public User getUser( // - вернуть пользователя по идентификатору
+        @PathVariable("id") Integer userId
+    ) {
+        return userService.getUser(userId);
+    }
+
+    @PutMapping("/{id}/friends/{friendId}") // — добавление в друзья.
     public User addToFriends(
-            @PathVariable("id") Integer userId,
-            @PathVariable Integer friendId
+        @PathVariable("id") Integer userId,
+        @PathVariable Integer friendId
     ) {
 
         return userService.addToFriends(userId,friendId);
     }
 
-    public void removeFromFriends( //DELETE /users/{id}/friends/{friendId} — удаление из друзей
-            @PathVariable("id") Integer userId,
-            @PathVariable Integer friendId
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void removeFromFriends( // — удаление из друзей
+        @PathVariable("id") Integer userId,
+        @PathVariable Integer friendId
     ) {
+        log.info("***********  " + userId + " ***** "+ friendId );
             userService.removeFromFriends(userId,friendId);
     }
 
-    public List<User> getMyFriends(Integer userId) { //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
-    return List.of();
+    @GetMapping("{id}/friends")
+    public List<User> getMyFriends( // — возвращаем список пользователей, являющихся его друзьями.
+        @PathVariable("id") Integer userId
+    ) {
+        return userService.getMyFriends(userId);
     }
 
-    public void getMutualFriends(Integer userId) { //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getMutualFriends( // — список друзей, общих с другим пользователем.
+        @PathVariable("id") Integer userId,
+        @PathVariable Integer otherId
+    ) {
+
+        return userService.getMutualFriends(userId, otherId);
     }
 }

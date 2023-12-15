@@ -18,8 +18,7 @@ class FilmTest {
     film = new Film(1,"Фильм",
             "Описание",
             LocalDate.of(2000,1,1),
-            100,
-            Set.of());
+            100,0);
 
         film1 =  Film.builder()
                 .id(1)

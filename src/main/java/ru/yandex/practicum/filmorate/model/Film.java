@@ -21,7 +21,6 @@ public class Film {
     @NotBlank
     private final String name;
 
-
     @Size(max = 200)
     private final String description;
 
@@ -31,20 +30,23 @@ public class Film {
     @Positive
     private final int duration;
 
-    @Singular
-    private final Set<Integer> likes;
+    /*@Singular
+    private final Set<Integer> likes;*/
 
-    public void setLike(int idUser){
+    @Builder.Default
+    private final int rate = 0;
+
+  /*  public void setLike(int idUser){
         likes.add(idUser);
-    }
+    }*/
 
-    public Integer getNumberLikes() {
+   /*  public Integer getNumberLikes() {
         return likes.size();
     }
-
-    public void deleteLike(int idUser){
+*/
+    /*public void deleteLike(int idUser){
         if(likes.contains(idUser)) {
             likes.remove(idUser);
         }
-    }
+    }*/
 }

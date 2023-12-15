@@ -5,17 +5,23 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  хранения, обновления и поиска объектов
  */
 public interface FilmStorage {
 
-    void addFilm(Film film);
-
-    Film up(Film film);
+    int addFilm(Film film);
 
     List<Film> getFilms();
 
-    public Film getFilm(int filmId);
+    Film getFilm(int filmId);
+
+    Film removeFilm(Film film);
+
+    int removeLike(int filmId, Set<Integer> setLikes);
+
+    Set<Integer> getLikes(int filmId);
 }

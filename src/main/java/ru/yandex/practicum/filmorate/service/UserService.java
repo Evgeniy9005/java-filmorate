@@ -3,21 +3,16 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exceptions.FriendException;
-import ru.yandex.practicum.filmorate.exceptions.InputParametersException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.util.Util;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**Создайте UserService, который будет отвечать за такие операции с пользователями,
@@ -46,7 +41,7 @@ public class UserService {
     public User create(User user) {
         User newUser = noName(user,getNextId());
         users.addUser(newUser);
-        UserService.log.info("В сервисе! Добавлен пользователь = "+newUser);
+        UserService.log.info("В сервисе! Добавлен пользователь = " + newUser);
         return users.getUser(newUser);
     }
 
@@ -65,61 +60,80 @@ public class UserService {
         return users.getUsers();
     }
 
+
+    public User getUser(Integer userId) {
+        Util.valid(userId);
+
+        return users.getUser(userId);
+    }
+
     //PUT /users/{id}/friends/{friendId} — добавление в друзья.
     public User addToFriends(Integer userId, Integer friendId) {
-        valid(userId, friendId); // проверка входных параметров
+        if (userId == friendId) {
+            throw new FriendException("Вы и так себе друг! Добавьте в друзья кого-то из пользователей!");
+        }
 
-        //создает и обновляет пользовател
-        up(users.getUser(userId).toBuilder().friend(userId).build());
+        Util.valid(userId, friendId); // проверка входных параметров
 
+        up(users.getUser(userId).toBuilder().friend(friendId).build());
         //создает и обновляет пользовател возвращает  добавлинего пользователя в друзьядруга
-        return up(users.getUser(userId).toBuilder().friend(friendId).build());
+
+        return up(users.getUser(friendId).toBuilder().friend(userId).build());
+
     }
 
     public void removeFromFriends(Integer userId, Integer friendId) { //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
-        valid(userId, friendId); // проверка входных параметров
-        User user = users.getUser(userId);
+        Util.valid(userId, friendId); // проверка входных параметров
 
-        if(user.isFriend(friendId)) { //мой друг?
-            Set<Integer> setFriends = user.getFriends();
-            setFriends.remove(friendId);//удалить из друзей
-            up(user.toBuilder().friends(setFriends).build()); //обновить
-        } else {
-            throw new FriendException("Нет в друзьях пользователя под идентификаторм " + friendId);
+        User user = users.getUser(userId);
+        User friend = users.getUser(friendId);
+
+            Set<Integer> setFriendsUser = new HashSet<>(user.getFriends());
+
+            Set<Integer> setFriendsFriend = new HashSet<>(friend.getFriends());
+
+            if (setFriendsUser.contains(friendId)) {
+
+                setFriendsUser.remove(friendId);//удалить из друзей
+
+                up(user.toBuilder().clearFriends().friends(setFriendsUser).build()); //обновить
+
+            } else {
+                throw new FriendException("У пользователя " + userId +
+                        " нет в друзьях пользователя" + friendId);
+            }
+
+
+            if (setFriendsFriend.contains(userId)) {
+                setFriendsFriend.remove(userId);//удалить из друзей
+                up(friend.toBuilder().clearFriends().friends(setFriendsFriend).build()); //обновить
+            } else {
+                throw new FriendException("У пользователя " + friendId +
+                        " нет в друзьях пользователя" + userId);
+            }
+
         }
 
-    }
 
     public List<User> getMyFriends(Integer userId) { //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
+        Util.valid(userId);
 
-        return List.of();
+        return users.getUser(userId).getFriends().stream()
+                .filter(uId -> users.isUser(uId))
+                .map(uId -> users.getUser(uId))
+                .collect(Collectors.toList());
+
     }
 
-    public void getMutualFriends(Integer id, Integer otherId) { //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
+    public List<User> getMutualFriends(Integer id, Integer otherId) { //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
+        Util.valid(id,otherId);
 
+    return users.getUser(id).getFriends().stream()
+            .filter(uId -> users.getUser(otherId).getFriends().contains(uId))
+            .map(uId -> users.getUser(uId))
+            .collect(Collectors.toList());
     }
 
-    private void valid(Integer id, Integer friendId) {
-        if(id == null || id == 0) {
-            throw new InputParametersException("Отсутствует идентификатор " + id);
-        }
-
-        if(friendId == null || friendId == 0) {
-            throw new InputParametersException("Отсутствует идентификатор " + friendId);
-        }
-
-        if(id < 0 || friendId < 0) {
-            throw new InputParametersException("Идентификатор не может быть отрицательным " + friendId);
-        }
-    }
-
-    boolean valid(Integer id) {
-        if(id == null || id == 0) {
-            throw new InputParametersException("Отсутствует идентификатор " + id);
-        }
-
-        return false;
-    }
 
     private User noName(User user, int generatedId) {
         String name = user.getName();
