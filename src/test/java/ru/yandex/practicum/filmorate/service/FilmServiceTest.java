@@ -65,9 +65,4 @@ class FilmServiceTest {
         filmStorage.addFilm(film.toBuilder().id(2).build());
         System.out.println(" ..." +filmService.getPopular(2));
     }
-
-    @Test
-    void deleteLike() {
-
-    }
 }

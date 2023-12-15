@@ -14,7 +14,7 @@ class UserTest {
 
     @BeforeEach
     void start() {
-        user = new User( 1,"email", "login", "name",
+        user = new User(1,"email", "login", "name",
                 LocalDate.of(1999, 3, 3), Set.of());
 
         user1 = User
