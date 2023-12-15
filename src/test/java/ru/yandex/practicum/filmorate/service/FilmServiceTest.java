@@ -52,7 +52,7 @@ class FilmServiceTest {
         Set<Integer> set = filmStorage.getLikes(1);
         set.add(3);
         set.add(4);
-        int size =filmStorage.removeLike(1,set);
+        int size = filmStorage.removeLike(1,set);
         Film film = filmStorage.getFilm(1);
 
         filmService.up(film.toBuilder().rate(size).build());
@@ -63,6 +63,6 @@ class FilmServiceTest {
         System.out.println("  .." + filmService.getPopular(2));
 
         filmStorage.addFilm(film.toBuilder().id(2).build());
-        System.out.println(" ..." +filmService.getPopular(2));
+        System.out.println(" ..." + filmService.getPopular(2));
     }
 }
