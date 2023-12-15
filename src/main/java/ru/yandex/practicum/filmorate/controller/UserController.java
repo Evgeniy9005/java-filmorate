@@ -1,9 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -23,7 +21,6 @@ public class UserController {
 
     @PostMapping()
     public User createUser(@Valid @RequestBody User user) {
-
         return userService.create(user);
     }
 
@@ -39,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUser( // - вернуть пользователя по идентификатору
+    public User getUser(// - вернуть пользователя по идентификатору
         @PathVariable("id") Integer userId
     ) {
         return userService.getUser(userId);
@@ -50,32 +47,29 @@ public class UserController {
         @PathVariable("id") Integer userId,
         @PathVariable Integer friendId
     ) {
-
         return userService.addToFriends(userId,friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public void removeFromFriends( // — удаление из друзей
+    public void removeFromFriends(// — удаление из друзей
         @PathVariable("id") Integer userId,
         @PathVariable Integer friendId
     ) {
-        log.info("***********  " + userId + " ***** "+ friendId );
             userService.removeFromFriends(userId,friendId);
     }
 
     @GetMapping("{id}/friends")
-    public List<User> getMyFriends( // — возвращаем список пользователей, являющихся его друзьями.
+    public List<User> getMyFriends(// — возвращаем список пользователей, являющихся его друзьями.
         @PathVariable("id") Integer userId
     ) {
         return userService.getMyFriends(userId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> getMutualFriends( // — список друзей, общих с другим пользователем.
+    public List<User> getMutualFriends(// — список друзей, общих с другим пользователем.
         @PathVariable("id") Integer userId,
         @PathVariable Integer otherId
     ) {
-
         return userService.getMutualFriends(userId, otherId);
     }
 }

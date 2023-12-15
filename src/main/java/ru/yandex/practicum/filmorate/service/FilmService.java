@@ -24,9 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class FilmService {
-
     private FilmStorage films;
-
 
     private static Integer globalId = 0;
 
@@ -98,10 +96,6 @@ public class FilmService {
         int size = films.removeLike(filmId,set);
         Film film = films.getFilm(filmId);
         up(film.toBuilder().rate(size).build());
-        log.info("Оценнен фильм пользователями " + films.getLikes(filmId));
-        log.info("Удалена оценка фильма " + films.getFilm(filmId));
-
-
     }
 
     /*Возвращает список из первых count фильмов по количеству лайков.
@@ -116,15 +110,11 @@ public class FilmService {
             count = size;
         }
 
-
-        System.out.println(films.getFilms());
         return films.getFilms().stream()
                 .sorted((f1, f2) -> compare(f1.getRate(),f2.getRate()))
                 .skip(0)
                 .limit(count)
                 .collect(Collectors.toList());
-
-
     }
 
     private int compare(Integer f0, Integer f1) {

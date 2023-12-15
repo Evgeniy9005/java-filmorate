@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.User;
@@ -32,6 +33,7 @@ class UserServiceTest {
 
     private User user2 = User
             .builder()
+            .id(2)
             .email("deadpool@email.ru")
             .name("Уэйд")
             .login("Deadpool")
@@ -39,16 +41,15 @@ class UserServiceTest {
             .friends(new HashSet<>())
             .build();
 
+
     @Test
     void create() {
-        userService.create(user);
-        userService.create(user2);
+        User user3 = userService.create(user);
+        User user4 = userService.create(user2);
         System.out.println();
         userService.getUsers().stream().forEach(System.out::println);
         System.out.println(user.getFriends().getClass());
 
-        User user3 = userService.getUser(1);
-        User user4 = userService.getUser(2);
 
         userService.addToFriends(user3.getId(),user4.getId());
 

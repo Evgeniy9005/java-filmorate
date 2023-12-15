@@ -11,13 +11,7 @@ import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handle(final RuntimeException e) {
-        return new ErrorResponse(
-                e.getClass().getName(), "Произошла непредвиденная ошибка!"
-        );
-    }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -48,6 +42,14 @@ public class ErrorHandler {
     public ErrorResponse handle(final FilmNotFoundException e) {
         return new ErrorResponse(
                 e.getClass().getName(),  e.getMessage() + " Фильм не найден!"
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handle(final RuntimeException e) {
+        return new ErrorResponse(
+                e.getClass().getName(), "Произошла непредвиденная ошибка!"
         );
     }
 }

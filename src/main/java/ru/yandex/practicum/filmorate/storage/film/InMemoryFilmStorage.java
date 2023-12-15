@@ -33,7 +33,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film removeFilm(Film film) {
         Integer id = film.getId();
 
-        if(filmMap.containsKey(id)) {
+        if (filmMap.containsKey(id)) {
             return filmMap.remove(id);
         }
 
@@ -51,8 +51,8 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film getFilm(int filmId) {
-        if(!filmMap.containsKey(filmId)) {
-            throw new FilmNotFoundException("Идентификатор = "+filmId);
+        if (!filmMap.containsKey(filmId)) {
+            throw new FilmNotFoundException("Идентификатор = " + filmId);
         }
 
         log.info("Отправлен фильм c id = " + filmId);
@@ -64,7 +64,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     public Set<Integer> getLikes(int filmId) {
         if (filmMap.containsKey(filmId)) {
-            if(likes.containsKey(filmId)) {
+            if (likes.containsKey(filmId)) {
                 return new HashSet<>(likes.get(filmId));
             } else {
                 likes.put(filmId,new HashSet<>());

@@ -1,11 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.*;
-//import javax.validation.constraints.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -28,29 +25,6 @@ public class User {
     @Past
     private final LocalDate birthday;
 
-
     @Singular
     private final Set<Integer> friends;
-
-    /*@Builder.ObtainVia(method = "deleteFriend")
-    private final Set<Integer> users;*/
-
-    public boolean isFriend(int userId) {
-        return friends.contains(userId);
-    }
-
-    public void addFriend(Integer id){
-        friends.add(id);
-    }
-
-    public void deleteFriend(Integer id) {
-        if (friends.contains(id)) {
-
-        this.friends.remove(id);
-    }
-    }
-
-    public void setFriends(Set<Integer> friends) {
-       // this.friends = friends;
-    }
 }

@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.Valid;
 import java.util.List;
 
+@SuppressWarnings("checkstyle:Regexp")
 @Slf4j
 @RestController
 @RequestMapping("/films")
@@ -20,37 +21,30 @@ public class FilmController {
 
     @PostMapping()
     public Film createFilm(@Valid @RequestBody Film film) {
-
         log.info("Входной параметр метода создания " + film);
         return filmService.create(film);
-
     }
 
     @PutMapping()
     public Film updateFilm(@RequestBody @Valid Film film) {
         log.info("Входной параметр метода обновления " + film);
         return filmService.up(film);
-
     }
 
     @GetMapping()
     public List<Film> getFilms() {
-
     return filmService.getFilms();
-
     }
 
     @GetMapping("/{id}")
     public Film getFilm(
            @PathVariable("id") Integer filmId
     ) {
-
         return filmService.getFilm(filmId);
-
     }
 
-    @PutMapping("/{id}/like/{userId}")
-    public void likeIt( //PUT /films/{id}/like/{userId} — пользователь ставит лайк фильму.
+    @PutMapping("/{id}/like/{userId}")//PUT /films/{id}/like/{userId} — пользователь ставит лайк фильму
+    public void likeIt(
            @PathVariable("id") Integer filmId,
            @PathVariable() Integer userId
     ) {
@@ -58,8 +52,8 @@ public class FilmController {
         filmService.likeIt(filmId,userId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
-    public void deleteLike( //DELETE /films/{id}/like/{userId} — пользователь удаляет лайк.
+    @DeleteMapping("/{id}/like/{userId}")//DELETE /films/{id}/like/{userId} — пользователь удаляет лайк.
+    public void deleteLike(
            @PathVariable("id") Integer filmId,
            @PathVariable() Integer userId
     ) {
@@ -70,10 +64,10 @@ public class FilmController {
     /*GET /films/popular?count={count} — возвращает список из первых count фильмов
     по количеству лайков. Если значение параметра count не задано, вернет первые 10.*/
     @GetMapping("/popular")
-    public List<Film> getPopular (
+    public List<Film> getPopular(
             @RequestParam(defaultValue = "10", required = false) Integer count
     ) {
-        log.info(count+" - входной параметр метода получения списка фильмов по популярности");
+        log.info(count + " - входной параметр метода получения списка фильмов по популярности");
 
         return filmService.getPopular(count);
     }

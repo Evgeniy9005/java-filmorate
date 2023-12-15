@@ -1,15 +1,12 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.*;
 import ru.yandex.practicum.filmorate.annotations.MinDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-
 
 
 @Data
@@ -30,23 +27,6 @@ public class Film {
     @Positive
     private final int duration;
 
-    /*@Singular
-    private final Set<Integer> likes;*/
-
     @Builder.Default
-    private final int rate = 0;
-
-  /*  public void setLike(int idUser){
-        likes.add(idUser);
-    }*/
-
-   /*  public Integer getNumberLikes() {
-        return likes.size();
-    }
-*/
-    /*public void deleteLike(int idUser){
-        if(likes.contains(idUser)) {
-            likes.remove(idUser);
-        }
-    }*/
+    private final Integer rate = 0;
 }
