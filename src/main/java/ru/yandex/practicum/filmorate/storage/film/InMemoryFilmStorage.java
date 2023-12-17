@@ -26,10 +26,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         return id;
     }
 
-    public boolean isFilm(int id) {
-        return filmMap.containsKey(id);
-    }
-
     public Film removeFilm(Film film) {
         Integer id = film.getId();
 

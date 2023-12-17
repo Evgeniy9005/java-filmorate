@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.InputParametersException;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
  * вывод 10 наиболее популярных фильмов по количеству лайков.
 Пусть пока каждый пользователь может поставить лайк фильму только один раз.*/
 
-@Slf4j
 @Service
 public class FilmService {
     private FilmStorage films;

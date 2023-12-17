@@ -41,7 +41,7 @@ public class UserService {
     public User create(User user) {
         User newUser = noName(user,getNextId());
         users.addUser(newUser);
-        UserService.log.info("В сервисе! Добавлен пользователь = " + newUser);
+        log.info("В сервисе! Добавлен пользователь = " + newUser);
         return users.getUser(newUser);
     }
 
@@ -51,7 +51,7 @@ public class UserService {
         users.removeUser(user);
         User upUser = noName(user,id);
         users.addUser(upUser);
-        UserService.log.info("Обновлен пользователь= " + upUser);
+        log.info("Обновлен пользователь= " + upUser);
 
         return users.getUser(upUser);
     }
@@ -76,8 +76,8 @@ public class UserService {
         Util.valid(userId, friendId); // проверка входных параметров
 
         up(users.getUser(userId).toBuilder().friend(friendId).build());
-        //создает и обновляет пользовател возвращает  добавлинего пользователя в друзьядруга
 
+        //создает и обновляет пользовател возвращает  добавлинего пользователя в друзьядруга
         return up(users.getUser(friendId).toBuilder().friend(userId).build());
 
     }
@@ -114,8 +114,8 @@ public class UserService {
 
         }
 
-
-    public List<User> getMyFriends(Integer userId) { //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
+    //GET /users/{id}/friends — возвращаем список пользователей, являющихся его друзьями.
+    public List<User> getMyFriends(Integer userId) {
         Util.valid(userId);
 
         return users.getUser(userId).getFriends().stream()
@@ -125,7 +125,8 @@ public class UserService {
 
     }
 
-    public List<User> getMutualFriends(Integer id, Integer otherId) { //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
+    //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
+    public List<User> getMutualFriends(Integer id, Integer otherId) {
         Util.valid(id,otherId);
 
     return users.getUser(id).getFriends().stream()
