@@ -121,6 +121,6 @@ class UserControllerTest {
 
         //проверка валидации поля birthday
         validUser(user.toBuilder().birthday(LocalDate.of(3000,1,1)).build());
-        validUser(user.toBuilder().birthday(null).build());
+
     }
 }

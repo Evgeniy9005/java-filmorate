@@ -42,7 +42,6 @@ class FilmControllerTest {
             .duration(30)
             .build();
 
-
     @Test
     void createAndUpdateAndGetFilm() throws Exception {
 
