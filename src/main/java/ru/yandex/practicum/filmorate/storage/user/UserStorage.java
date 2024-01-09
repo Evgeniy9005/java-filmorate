@@ -22,4 +22,8 @@ public interface UserStorage {
 
     boolean isUser(int id);
 
+    boolean iAgreeFriend(int userId, int friendId);
+    User addToFriends(int userId, int friendId);
+    void removeFromFriends(int userId, int friendId);
+
 }

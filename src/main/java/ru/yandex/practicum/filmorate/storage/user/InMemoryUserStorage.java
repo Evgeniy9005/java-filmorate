@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -31,6 +32,21 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public boolean isUser(int id) {
         return userMap.containsKey(id);
+    }
+
+    @Override
+    public boolean iAgreeFriend(int userId, int friendId) {
+        return false;
+    }
+
+    @Override
+    public User addToFriends(int userId, int friendId) {
+        return null;
+    }
+
+    @Override
+    public void removeFromFriends(int userId, int friendId) {
+
     }
 
 

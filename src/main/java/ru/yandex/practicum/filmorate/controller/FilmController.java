@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/films")
-@RequiredArgsConstructor
+@RequiredArgsConstructor //добавить конструктор
 public class FilmController {
 
     private final FilmService filmService;

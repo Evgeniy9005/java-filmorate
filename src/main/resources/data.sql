@@ -1,0 +1,32 @@
+INSERT INTO TEST (WORD)
+VALUES ('Привет');
+
+INSERT INTO MPA (MPA_ID, MPA_RATING)
+VALUES (1,'G'),
+(2,'PG'),
+(3,'PG-13'),
+(4,'R'),
+(5,'NC-17');
+
+INSERT INTO FILM_GENRE (GENRE_ID,GENRE)
+VALUES (1,'Комедия'),
+(2,'Боевик'),
+(3,'Семейный'),
+(4,'Приключения'),
+(5,'Фантастика');
+
+INSERT INTO FILMS (FILM_ID, FILM_NAME, FILM_DESCRIPTION, FILM_RELEASE_DATE, FILM_DURATION, MPA_ID)
+VALUES (1,'X-Man','Описание фильма','2000-03-01','100',2);
+
+INSERT INTO GENRES (GENRES_ID, FILM_ID, GENRE_ID)
+VALUES (1,1,2),
+(2,1,5);
+
+--INSERT INTO USERS (USER_ID, USER_EMAIL, USER_LOGIN, USER_NAME, USER_BIRTHDAY)
+--VALUES (1,'mail@mail.ru', 'dolore', 'Nick Name', '1946-08-20'),
+--(2,'yandex@yandex.ru','Login','user','1990-09-09');
+
+--INSERT INTO FILM_LIKES (FILM_LIKES_ID, FILM_ID, USER_ID)
+--VALUES (1,1,1),
+--(2,1,2);
+

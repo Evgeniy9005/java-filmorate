@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.FriendException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -25,11 +26,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserService {
-
+    @Autowired
+    @Qualifier("users")
     private UserStorage users;
     private static Integer globalId = 0;
 
-    @Autowired
+
     public UserService(UserStorage users) {
         this.users = users;
     }
@@ -73,11 +75,13 @@ public class UserService {
             throw new FriendException("Вы и так себе друг! Добавьте в друзья кого-то из пользователей!");
         }
 
+       // users.iAgreeFriend()
+
         Util.valid(userId, friendId); // проверка входных параметров
 
         up(users.getUser(userId).toBuilder().friend(friendId).build());
 
-        //создает и обновляет пользовател возвращает  добавлинего пользователя в друзьядруга
+        //создает и обновляет пользователя возвращает добавленного пользователя в друзья друга
         return up(users.getUser(friendId).toBuilder().friend(userId).build());
 
     }
