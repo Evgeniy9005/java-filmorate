@@ -36,33 +36,6 @@ class UserDbStorageTest {
 
     private final JdbcTemplate jdbcTemplate;
     private UserStorage users;
-   // private UserDbStorage users;
-
-    //private JdbcConnectService connectDB = new JdbcConnectService();
-
-  //  UserStorage users= new UserDbStorage(this.jdbcTemplate);
-
-    //private JdbcTemplate jdbcTemplate = connectDB.getTemplate();
-
-    //  private UserDbStorage userDbStorage;
-
-    /*private User user1 = User.builder()
-            .id(1)
-            .login("login1")
-            .email("email1")
-            .name("name1")
-            .birthday(LocalDate.of(1990, 1, 1))
-            .friends(Set.of())
-            .build();
-
-    private User user2 = User.builder()
-            .id(1)
-            .login("login2")
-            .email("email2")
-            .name("name3")
-            .birthday(LocalDate.of(1990, 1, 1))
-            .friends(Set.of())
-            .build();*/
 
     private User[] user = new User[6];
 
@@ -113,9 +86,11 @@ class UserDbStorageTest {
         assertTrue(users.isUser(3),"есть пользователь 3?");
 
         assertEquals(2,users.addToFriends(1,2).getId(),
-                "Пользователь 2 подал заявку в друзья");
+                "Пользователь 1 подал заявку в друзья к пользователю 2");
         assertEquals(3,users.addToFriends(1,3).getId(),
-                "Пользователь 3 подал заявку в друзья");
+                "Пользователь 1 подал заявку в друзья к пользователю 3");
+        assertEquals(4,users.addToFriends(1,4).getId(),
+                "Пользователь 1 подал заявку в друзья к пользователю 4");
 
         assertEquals("Пользователь не найден id = 9999"
                 ,assertThrows(UserNotFoundException.class, ()->
@@ -123,17 +98,30 @@ class UserDbStorageTest {
                 ).getMessage());
 
 
-        assertTrue(users.iAgreeFriend(1,2),"Пользователь 1 подтвердил заявку в друзья от пользователя 2");
-        assertFalse(users.iAgreeFriend(1,2),"Пользователь 1 подтвердил заявку в друзья от пользователя 2 второй раз");
+        assertTrue(users.iAgreeFriend(2,1),"Пользователь 2 подтвердил заявку в друзья от пользователя 1");
+        assertFalse(users.iAgreeFriend(2,1),"Пользователь 2 подтвердил заявку в друзья от пользователя 1 второй раз");
         assertTrue(users.iAgreeFriend(3,1),"Пользователь 3 подтвердил заявку в друзья от пользователя 1 порядок ввода параметров не важен");
+
+
+        assertIterableEquals(List.of(2,3,4), users.getUser(1).getFriends(),"у пользователя 1 должен быть друг 2 и 3");
+        assertIterableEquals(List.of(1), users.getUser(2).getFriends(),"у пользователя 2 должен быть друг 1");
+        assertIterableEquals(List.of(1), users.getUser(3).getFriends(),"у пользователя 3 должен быть друг 1");
+        assertIterableEquals(List.of(), users.getUser(4).getFriends(),"у пользователя 4 не должно быть друзей");
+
+        User userUp = users.getUser(1).toBuilder().login("loginUp")
+                .email("emailUp")
+                .name("nameUp")
+                .birthday(LocalDate.of(1990, 1, 1))
+                .build();
+        ;
+        assertEquals(userUp,users.updateUser(userUp),"проверка обновления пользователя");
+
 
         users.removeFromFriends(1,2);
         assertEquals("Пользователи не в друзьях"
                 ,assertThrows(FriendException.class, ()->
                         users.removeFromFriends(1,2) //проверка, что было произведено удаление из друзей
                 ).getMessage());
-
-
 
     }
 

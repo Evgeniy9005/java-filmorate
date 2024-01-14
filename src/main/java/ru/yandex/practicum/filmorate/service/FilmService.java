@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.InputParametersException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.util.Util;
@@ -41,22 +43,30 @@ public class FilmService {
 
     public Film create(Film film) {
 
-        return films.getFilm(films.addFilm(film.toBuilder().id(getNextId()).build()));
-
-    }
-
-    public Film up(Film film) {
-
-        films.removeFilm(film);
-
+        // return films.getFilm(films.addFilm(film.toBuilder().id(getNextId()).build()));
         int id = films.addFilm(film);
 
         return films.getFilm(id);
     }
 
+    public Film up(Film film) {
+
+        /*films.removeFilm(film);
+
+        int id = films.addFilm(film);
+
+        return films.getFilm(id);*/
+        return films.updateFilm(film);
+    }
+
 
     public List<Film> getFilms() {
-        return films.getFilms();
+
+        List<Film> list = films.getFilms();
+        System.out.println("*******************************");
+        list.stream().forEach(System.out::println);
+        System.out.println("*******************************");
+        return list;
     }
 
     public Film getFilm(Integer filmId) {
@@ -68,24 +78,25 @@ public class FilmService {
 
         Util.valid(filmId,userId);
 
-        if (!InMemoryUserStorage.containsUser(userId)) {
+        /*if (!InMemoryUserStorage.containsUser(userId)) {
             throw new InputParametersException("Пользователь " + userId + " не найден!");
         }
 
         Set<Integer> set = films.getLikes(filmId);
 
         set.add(userId);
-        int size = films.removeLike(filmId,set);
+       // int size = films.removeLike(filmId,set);
 
         Film film = films.getFilm(filmId);
-        up(film.toBuilder().rate(size).build());
+       // up(film.toBuilder().rate(size).build());*/
 
+        films.likeFilm(filmId,userId);
     }
 
     public void deleteLike(Integer filmId, Integer userId) { // — пользователь удаляет лайк.
         Util.valid(filmId,userId);
 
-        if (!InMemoryUserStorage.containsUser(userId)) {
+        /*if (!InMemoryUserStorage.containsUser(userId)) {
             throw new InputParametersException("Пользователь " + userId + " не найден!");
         }
 
@@ -95,9 +106,11 @@ public class FilmService {
             set.remove(userId);
         }
 
-        int size = films.removeLike(filmId,set);
+       // int size = films.removeLike(filmId,set);
         Film film = films.getFilm(filmId);
-        up(film.toBuilder().rate(size).build());
+      //  up(film.toBuilder().rate(size).build());*/
+
+        films.removeLike(filmId,userId);
     }
 
     /*Возвращает список из первых count фильмов по количеству лайков.
@@ -112,15 +125,34 @@ public class FilmService {
             count = size;
         }
 
-        return films.getFilms().stream()
+        List<Film> list = films.getFilms().stream()
                 .sorted((f1, f2) -> compare(f1.getRate(),f2.getRate()))
                 .skip(0)
                 .limit(count)
                 .collect(Collectors.toList());
+        return list;
     }
 
     private int compare(Integer f0, Integer f1) {
-        int result = f0.compareTo(f1); // порядок сортировки повозрастанию
+        int result = f1.compareTo(f0); // порядок сортировки по возрастанию
         return result;
+    }
+
+    public Genre getGenre(Integer genreId) {
+        Util.valid(genreId);
+        return films.getGenre(genreId);
+    }
+
+    public List<Genre> getGenres() {
+        return films.getGenres();
+    }
+
+    public Mpa getMPA(Integer mpaId) {
+        Util.valid(mpaId);
+        return films.getMPA(mpaId);
+    }
+
+    public List<Mpa> getAllMPA() {
+        return films.getAllMPA();
     }
 }

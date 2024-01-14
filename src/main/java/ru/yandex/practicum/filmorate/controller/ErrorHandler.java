@@ -48,6 +48,33 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final FilmException e) {
+        log.debug("Получен статус 404 Not found {}",e.getMessage(),e);
+        return new ErrorResponse(
+                e.getException(),  e.toString()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final GenreException e) {
+        log.debug("Получен статус 404 Not found {}",e.getMessage(),e);
+        return new ErrorResponse(
+                e.getClass().getName(),  e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final RatingException e) {
+        log.debug("Получен статус 404 Not found {}",e.getMessage(),e);
+        return new ErrorResponse(
+                e.getClass().getName(),  e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handle(final RuntimeException e) {
         log.debug("Получен статус 500 internal server error {}",e.getMessage(),e);
@@ -55,4 +82,5 @@ public class ErrorHandler {
                 e.getClass().getName(), "Произошла непредвиденная ошибка!"
         );
     }
+
 }

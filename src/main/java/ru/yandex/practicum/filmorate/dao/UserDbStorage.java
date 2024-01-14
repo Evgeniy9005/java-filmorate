@@ -17,7 +17,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -26,10 +28,8 @@ import java.util.List;
 public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
-    private DataSource dataSource;
 
     private int[]  argTypes  = new int[] {
-                //Types.INTEGER, //USER_ID
                 Types.VARCHAR, //USER_EMAIL
                 Types.VARCHAR, //USER_LOGIN
                 Types.VARCHAR, //USER_NAME
@@ -56,7 +56,6 @@ public class UserDbStorage implements UserStorage {
 
     private Object[] args(User user) {
         return new Object[] {
-                // user.getId(),
                 user.getEmail(),
                 user.getLogin(),
                 user.getName(),
@@ -80,15 +79,16 @@ public class UserDbStorage implements UserStorage {
 
         int[] arrayType = new int[] {Types.INTEGER,Types.INTEGER,Types.BOOLEAN};
 
-        Object[] args = new Object[]{userId, friendId, false};
+        Object[] args = new Object[]{userId, friendId, true};
 
-        int row = jdbcTemplate.update(sql,args, arrayType);
+        int row = jdbcTemplate.update(sql,args, arrayType);// userId добавил к себе в друзья friendId
         args[0] = friendId;
         args[1] = userId;
-        args[2] = true;
-        row +=  jdbcTemplate.update(sql,args, arrayType);
+        args[2] = false; // friendId не подтверждал дружбу
+        row +=  jdbcTemplate.update(sql,args, arrayType);// к friendId добавлен userId как подписчик
 
-        log.info("Добавлено количество строк = {}",row);
+        log.info("Добавлено количество строк = {}," +
+                " при добавлении пользователей  {} и {} в друзья ",row,userId,friendId);
 
         return getUser(friendId);//пользователь friendId сделал запрос в друзья к userId
     }
@@ -111,8 +111,10 @@ public class UserDbStorage implements UserStorage {
                 "FROM PUBLIC.FRIENDS " +
                 "WHERE (USER_ID = %1$s AND FRIEND_ID = %2$s) OR (USER_ID = %2$s AND FRIEND_ID = %1$s)",userId,friendId);
 
+
         SqlRowSet friends = jdbcTemplate.queryForRowSet(sql);
-        if (friends.next()) {
+
+        while (friends.next()) {
             if(!friends.getBoolean("CHECK_FRIEND")) {
                 int recIduser = friends.getInt("USER_ID");
                 int recIdfriend = friends.getInt("USER_ID");
@@ -127,10 +129,6 @@ public class UserDbStorage implements UserStorage {
                         friends.getInt("FRIENDS_ID"));
 
                 log.info("Обновлено количество строк = {}",row);
-
-                //обновить списки друзей у пользователей
-
-                //getUser(recIduser).toBuilder().friends()
 
                 return true;
             }
@@ -158,6 +156,25 @@ public class UserDbStorage implements UserStorage {
 
     }
 
+    private boolean isFriends(int userId, int friendId) { //проверяет в друзьях пользователи или нет
+
+        String sqlIsFriends = String.format("SELECT COUNT(FRIENDS_ID) AS count_f " +
+                        "FROM PUBLIC.FRIENDS " +
+                        "WHERE (USER_ID = %1$s AND FRIEND_ID = %2$s) OR (USER_ID = %2$s AND FRIEND_ID = %1$s)"
+                ,userId,friendId);
+
+        SqlRowSet countF = jdbcTemplate.queryForRowSet(sqlIsFriends);
+        if (countF.next()) {
+            int count = countF.getInt("count_f");
+            log.info("countF: {}", count);
+            if(count == 2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     @Override
     public User removeUser(User user) {
         int userId = user.getId();
@@ -165,7 +182,6 @@ public class UserDbStorage implements UserStorage {
         isUser(userId); //проверить есть
 
         //запрос на удаление
-
         int row = jdbcTemplate.update("DELETE FROM PUBLIC.USERS WHERE USER_ID=" + userId);
 
         log.info("Удалено количество строк = {}",row);
@@ -179,7 +195,8 @@ public class UserDbStorage implements UserStorage {
         String sqlGetUsers = "SELECT USER_ID, USER_EMAIL, USER_LOGIN, USER_NAME, USER_BIRTHDAY " +
                 "FROM PUBLIC.USERS;";
 
-         List<User> users;
+        List<User> users;
+
     try {
         users = jdbcTemplate.query(sqlGetUsers, (rs, rowNum) -> makeUser(rs));
     } catch (EmptyResultDataAccessException e) {
@@ -218,7 +235,7 @@ public class UserDbStorage implements UserStorage {
         return user;
     }
 
-    @Override
+     @Override
     public boolean isUser(int id) {
 
         SqlRowSet userId = jdbcTemplate.queryForRowSet("select user_id from users where user_id = " +id);
@@ -232,33 +249,54 @@ public class UserDbStorage implements UserStorage {
     }
 
 
-    private boolean isFriends(int userId, int friendId) { //проверяет в друзьях пользователи или нет
 
-        String sqlIsFriends = String.format("SELECT COUNT(FRIENDS_ID) AS count_f " +
-                        "FROM PUBLIC.FRIENDS " +
-                        "WHERE (USER_ID = %1$s AND FRIEND_ID = %2$s) OR (USER_ID = %2$s AND FRIEND_ID = %1$s)"
-                ,userId,friendId);
+    public User updateUser(User user) {
+        int userId = user.getId();
 
-        SqlRowSet countF = jdbcTemplate.queryForRowSet(sqlIsFriends);
-        if (countF.next()) {
-            int count = countF.getInt("count_f");
-            log.info("countF: {}", count);
-            if(count == 2) {
-                return true;
-            }
+        //есть ли пользователи
+        isUser(userId);
+
+            int row = jdbcTemplate.update("UPDATE PUBLIC.USERS SET USER_EMAIL=?," +
+                    " USER_LOGIN=?, " +
+                    "USER_NAME=?, " +
+                    "USER_BIRTHDAY=? " +
+                    "WHERE USER_ID=?;",
+                    user.getEmail(),user.getLogin(),user.getName(),user.getBirthday(),userId);
+
+          //  String sql = "UPDATE PUBLIC.FRIENDS SET USER_ID=0, FRIEND_ID=0, CHECK_FRIEND=FALSE WHERE FRIENDS_ID=0;";
+
+        //обновить друзей
+        Set<Integer> userFriends = user.getFriends();
+        if(userFriends == null || userFriends.isEmpty()) {
+
+            row += jdbcTemplate.update( "UPDATE PUBLIC.FRIENDS SET CHECK_FRIEND=FALSE WHERE FRIENDS_ID= " +
+                    "(SELECT FRIENDS_ID FROM PUBLIC.FRIENDS WHERE USER_ID = ? AND CHECK_FRIEND = TRUE);",userId);
+            return user.toBuilder().clearFriends().friends(new HashSet<>()).build();
+        } else {
+            userFriends.stream().map(fId -> {
+                //добавить в друзья если нет
+                User getUser = addToFriends(userId, fId);
+                //подтвердить дружбу
+                boolean status = iAgreeFriend(userId, fId);
+                log.info("Статус подтверждения в друзья при обновлении  = {}," +
+                        " пользователь добавлен в друзья {}", status, getUser.getId());
+                return status;
+            });
         }
-    return false;
+            log.info("Обновлено количество строк = {}",row);
+
+        return getUser(userId);
     }
 
 
     private User makeUser(ResultSet rs) throws SQLException {
-        Integer user_id = rs.getInt("user_id");
+        Integer userId = rs.getInt("user_id");
         String userEmail = rs.getString("user_email");
         String userLogin = rs.getString("user_login");
         String userName = rs.getString("user_name");
         LocalDate userBirthday = rs.getDate("user_birthday").toLocalDate();
         return User.builder()
-                .id(user_id)
+                .id(userId)
                 .email(userEmail)
                 .login(userLogin)
                 .name(userName)

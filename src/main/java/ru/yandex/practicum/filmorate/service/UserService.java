@@ -48,14 +48,20 @@ public class UserService {
     }
 
     public User up(User user) {
-        int id = user.getId();
+        System.out.println(user);
+
+        User userUp = users.updateUser(user);
+
+        log.info("Обновлен пользователь= " + userUp);
+
+        /*int id = user.getId();
 
         users.removeUser(user);
         User upUser = noName(user,id);
         users.addUser(upUser);
-        log.info("Обновлен пользователь= " + upUser);
+        log.info("Обновлен пользователь= " + upUser);*/
 
-        return users.getUser(upUser);
+        return users.getUser(userUp);
     }
 
     public List<User> getUsers() {
@@ -71,25 +77,33 @@ public class UserService {
 
     //PUT /users/{id}/friends/{friendId} — добавление в друзья.
     public User addToFriends(Integer userId, Integer friendId) {
-        if (userId == friendId) {
+        log.info("Пользователи {} и {} добавляются друг другу в друзья",userId,friendId);
+       /* if (userId == friendId) {
             throw new FriendException("Вы и так себе друг! Добавьте в друзья кого-то из пользователей!");
         }
-
-       // users.iAgreeFriend()
 
         Util.valid(userId, friendId); // проверка входных параметров
 
         up(users.getUser(userId).toBuilder().friend(friendId).build());
 
         //создает и обновляет пользователя возвращает добавленного пользователя в друзья друга
-        return up(users.getUser(friendId).toBuilder().friend(userId).build());
+        return up(users.getUser(friendId).toBuilder().friend(userId).build());*/
 
+        if (userId == friendId) {
+            throw new FriendException("Вы и так себе друг! Добавьте в друзья кого-то из пользователей!");
+        }
+
+        Util.valid(userId, friendId); // проверка входных параметров
+        User friend = users.addToFriends(userId,friendId); //добавить в друзья
+        // users.iAgreeFriend(userId,friendId); //подтвердить дружбу
+        return friend;
     }
 
     public void removeFromFriends(Integer userId, Integer friendId) { //DELETE /users/{id}/friends/{friendId} — удаление из друзей.
         Util.valid(userId, friendId); // проверка входных параметров
 
-        User user = users.getUser(userId);
+        users.removeFromFriends(userId,friendId);
+       /* User user = users.getUser(userId);
         User friend = users.getUser(friendId);
 
             Set<Integer> setFriendsUser = new HashSet<>(user.getFriends());
@@ -114,7 +128,7 @@ public class UserService {
             } else {
                 throw new FriendException("У пользователя " + friendId +
                         " нет в друзьях пользователя" + userId);
-            }
+            }*/
 
         }
 
@@ -122,21 +136,34 @@ public class UserService {
     public List<User> getMyFriends(Integer userId) {
         Util.valid(userId);
 
-        return users.getUser(userId).getFriends().stream()
+       /* return users.getUser(userId).getFriends().stream()
                 .filter(uId -> users.isUser(uId))
                 .map(uId -> users.getUser(uId))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
+        System.out.println("&&&& "+userId);
+        return users.getUser(userId).getFriends().stream()
+                .map(fId -> {
+                    User user = users.getUser(fId);
+                    log.info("getMyFriends. Возвращает друга {} пользователя {}",user,userId);
+                    return user;
+                })
+                .collect(Collectors.toList());
     }
 
     //GET /users/{id}/friends/common/{otherId} — список друзей, общих с другим пользователем.
     public List<User> getMutualFriends(Integer id, Integer otherId) {
         Util.valid(id,otherId);
 
-    return users.getUser(id).getFriends().stream()
+    /*return users.getUser(id).getFriends().stream()
             .filter(uId -> users.getUser(otherId).getFriends().contains(uId))
             .map(uId -> users.getUser(uId))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());*/
+
+        return users.getUser(id).getFriends().stream()
+                .filter(uId -> users.getUser(otherId).getFriends().contains(uId))
+                .map(uId -> users.getUser(uId))
+                .collect(Collectors.toList());
     }
 
 

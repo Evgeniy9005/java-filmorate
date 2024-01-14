@@ -49,6 +49,11 @@ public class InMemoryUserStorage implements UserStorage {
 
     }
 
+    @Override
+    public User updateUser(User user) {
+        return null;
+    }
+
 
     @Override
     public User getUser(User user) {

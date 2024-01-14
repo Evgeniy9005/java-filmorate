@@ -28,5 +28,4 @@ public class User {
     @Singular
     private final Set<Integer> friends;
 
-
 }
