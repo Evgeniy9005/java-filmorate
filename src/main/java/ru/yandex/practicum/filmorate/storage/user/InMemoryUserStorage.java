@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -20,9 +19,10 @@ public class InMemoryUserStorage implements UserStorage {
     private static Set<Integer> idUsers = new HashSet<>();
 
     @Override
-    public void addUser(User user) {
+    public int addUser(User user) {
         idUsers.add(user.getId());
         userMap.put(user.getId(), user);
+        return user.getId();
     }
 
     public static boolean containsUser(int id) {

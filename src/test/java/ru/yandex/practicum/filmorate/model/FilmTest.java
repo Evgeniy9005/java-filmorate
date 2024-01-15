@@ -25,8 +25,11 @@ class FilmTest {
                 .id(1)
                 .name("Фильм")
                 .description("Описание")
-                .releaseDate(LocalDate.of(2000, 1, 1))
+                .releaseDate(LocalDate.of(2000,1,1))
                 .duration(100)
+                .rate(0)
+                .genres(new HashSet<>())
+                .mpa(new Mpa(1,"G"))
                 .build();
     }
 

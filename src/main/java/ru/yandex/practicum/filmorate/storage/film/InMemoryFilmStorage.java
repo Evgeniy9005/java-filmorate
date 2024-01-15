@@ -94,16 +94,6 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void deleteGenre(Genre genre) {
-
-    }
-
-    @Override
-    public Genre updateGenre(Genre genre) {
-        return null;
-    }
-
-    @Override
     public List<Genre> getGenres() {
         return null;
     }
@@ -115,16 +105,6 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Mpa addMPA(String mpa) {
-        return null;
-    }
-
-    @Override
-    public void deleteMPA(Mpa mpa) {
-
-    }
-
-    @Override
-    public Mpa updateMPA(Mpa mpa) {
         return null;
     }
 
@@ -151,9 +131,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         throw new FilmNotFoundException("Невозможно удалить оценку!");
-
     }
-
-
 
 }

@@ -1,9 +1,9 @@
 package ru.yandex.practicum.filmorate.exceptions;
 
-public class FilmException extends RuntimeException {
-    private String exception;
+public class UserException extends RuntimeException {
+    String exception;
 
-    public FilmException(String message, String exception) {
+    public UserException(String message, String exception) {
         super(message);
         this.exception = exception;
     }

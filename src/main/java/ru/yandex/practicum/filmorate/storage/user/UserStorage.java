@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface UserStorage {
 
-    void addUser(User user);
+    int addUser(User user);
 
     User removeUser(User user);
 

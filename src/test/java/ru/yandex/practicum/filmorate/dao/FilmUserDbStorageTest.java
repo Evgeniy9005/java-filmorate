@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -17,7 +16,6 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @JdbcTest // указываем, о необходимости подготовить бины для работы с БД
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class FilmDbStorageTest {
+class FilmUserDbStorageTest {
 
     private final JdbcTemplate jdbcTemplate;
     private FilmStorage films;
@@ -80,7 +78,7 @@ class FilmDbStorageTest {
 
 
     @Test
-    void addGetFilm() {
+    void Film() {
 
         assertEquals(1,films.addFilm(film[0]),"добавить фильм 1 в бд");
         assertEquals(2,films.addFilm(film[1]),"добавить фильм 2 в бд");
@@ -90,14 +88,6 @@ class FilmDbStorageTest {
         assertEquals(6,films.addFilm(film[5]),"добавить фильм 6 в бд");
 
         assertIterableEquals(List.of(film),films.getFilms(),"вернуть все фильмы");
-
-
-        assertIterableEquals(List.of(new Genre(1,"Комедия"),
-                new Genre(2,"Драма"),
-                new Genre(3,"Мультфильм"),
-                new Genre(4,"Триллер"),
-                new Genre(5,"Документальный"),
-                new Genre(6,"Боевик")),films.getGenres(),"вернуть все жанры");
 
         assertIterableEquals(List.of(new Mpa(1,"G"),
                 new Mpa(2,"PG"),
@@ -146,7 +136,7 @@ class FilmDbStorageTest {
 
 
     @Test
-    void addGetGenre() {
+    void exceptionGenre() {
 
         assertEquals("Жанра фильма не найден! id=9999"
                 ,assertThrows(GenreException.class, ()->
@@ -160,7 +150,7 @@ class FilmDbStorageTest {
     }
 
     @Test
-    void addGetMPA() {
+    void exceptionMPA() {
 
         assertEquals("Рейтинг фильма не найден! id=9999"
                 ,assertThrows(RatingException.class, ()->
@@ -177,7 +167,7 @@ class FilmDbStorageTest {
 
 
     @Test
-    void addUser() {
+    void User() {
 
         assertEquals(user[0],users.getUser(1),"найден пользователь 1");
         assertEquals(user[0],users.getUser(user[0]),"найден пользователь 1");

@@ -9,6 +9,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 public class User {
 
+
     private final Integer id;
 
     @Email

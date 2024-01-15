@@ -58,6 +58,15 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handle(final UserException e) {
+        log.debug("Получен статус 404 Not found {}",e.getMessage(),e);
+        return new ErrorResponse(
+                e.getException(),  e.toString()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handle(final GenreException e) {
         log.debug("Получен статус 404 Not found {}",e.getMessage(),e);
         return new ErrorResponse(

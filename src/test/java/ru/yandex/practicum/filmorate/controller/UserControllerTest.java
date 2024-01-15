@@ -39,6 +39,7 @@ class UserControllerTest {
 
         private User user2 = User
                 .builder()
+                .id(2)
                 .email("deadpool@email.ru")
                 .name("Уэйд")
                 .login("Deadpool")
@@ -114,7 +115,7 @@ class UserControllerTest {
         validUser(user.toBuilder().email("email").build());
         validUser(user.toBuilder().email(null).build());
 
-        //проверка валидации поля lodin
+        //проверка валидации поля login
         validUser(user.toBuilder().login("").build());
         validUser(user.toBuilder().login("    ").build());
         validUser(user.toBuilder().login(null).build());

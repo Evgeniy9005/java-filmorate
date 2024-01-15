@@ -60,7 +60,6 @@ public class UserController {
     public List<User> getMyFriends(// — возвращаем список пользователей, являющихся его друзьями.
         @PathVariable("id") Integer userId
     ) {
-        System.out.println("------------ "+userId);
         return userService.getMyFriends(userId);
     }
 
