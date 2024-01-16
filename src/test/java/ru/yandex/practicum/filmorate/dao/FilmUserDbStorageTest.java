@@ -41,31 +41,31 @@ class FilmUserDbStorageTest {
     void start() {
         films = new FilmDbStorage(this.jdbcTemplate);
 
-        for(int i = 1; i < film.length+1; i++) {
-            film[i-1] = Film.builder()
+        for (int i = 1; i < film.length + 1; i++) {
+            film[i - 1] = Film.builder()
                     .id(i)
-                    .name("film"+i)
-                    .description("Описание"+i)
+                    .name("film" + i)
+                    .description("Описание" + i)
                     .releaseDate(LocalDate.now())
-                    .duration(100+i)
+                    .duration(100 + i)
                     .rate(0)
                     .genres(new HashSet<>())
                     .mpa(new Mpa(1,"G"))
                     .build();
-            System.out.println(film[i-1]);
+            System.out.println(film[i - 1]);
         }
 
         users = new UserDbStorage(this.jdbcTemplate);
-        for(int i = 1; i < user.length+1; i++) {
-            user[i-1] = User.builder()
+        for (int i = 1; i < user.length + 1; i++) {
+            user[i - 1] = User.builder()
                     .id(i)
-                    .login("login"+i)
-                    .email("email"+i)
-                    .name("name"+i)
+                    .login("login" + i)
+                    .email("email" + i)
+                    .name("name" + i)
                     .birthday(LocalDate.of(1990, 1, 1))
                     .friends(Set.of())
                     .build();
-            System.out.println(user[i-1]);
+            System.out.println(user[i - 1]);
         }
 
         users.addUser(user[0]);
@@ -78,7 +78,7 @@ class FilmUserDbStorageTest {
 
 
     @Test
-    void Film() {
+    void film() {
 
         assertEquals(1,films.addFilm(film[0]),"добавить фильм 1 в бд");
         assertEquals(2,films.addFilm(film[1]),"добавить фильм 2 в бд");
@@ -112,8 +112,8 @@ class FilmUserDbStorageTest {
 
         films.likeFilm(1,1);
         assertEquals(1,films.getFilm(1).getRate(),"получить количество оценок 1");
-        assertEquals("Сбой при запросе оценки фильма!"
-                ,assertThrows(FilmException.class, ()->
+        assertEquals("Сбой при запросе оценки фильма!",
+                assertThrows(FilmException.class, () ->
                         films.likeFilm(1,1) //добавить оценку от того-же пользователя еще раз
                 ).getMessage());
         films.likeFilm(1,2);
@@ -127,8 +127,8 @@ class FilmUserDbStorageTest {
         assertEquals(films.getFilm(filmUp.getId()),films.updateFilm(filmUp), "обновить фильм еще раз подряд");
 
         films.removeFilm(filmUp); //удалить фильм
-        assertEquals("Сбой при получении фильма из базы данных!"
-                ,assertThrows(FilmException.class, ()->
+        assertEquals("Сбой при получении фильма из базы данных!",
+                assertThrows(FilmException.class, () ->
                         films.getFilm(filmUp.getId())//удален фильм
                 ).getMessage());
 
@@ -138,13 +138,13 @@ class FilmUserDbStorageTest {
     @Test
     void exceptionGenre() {
 
-        assertEquals("Жанра фильма не найден! id=9999"
-                ,assertThrows(GenreException.class, ()->
+        assertEquals("Жанра фильма не найден! id=9999",
+                assertThrows(GenreException.class, () ->
                         films.getGenre(9999)
                 ).getMessage());
 
-        assertEquals("Сбой запроса при добавлении жанра! Название \"Комедия\" уже есть"
-                ,assertThrows(GenreException.class, ()->
+        assertEquals("Сбой запроса при добавлении жанра! Название \"Комедия\" уже есть",
+                assertThrows(GenreException.class, () ->
                         films.addGenre("Комедия")
                 ).getMessage());
     }
@@ -152,14 +152,14 @@ class FilmUserDbStorageTest {
     @Test
     void exceptionMPA() {
 
-        assertEquals("Рейтинг фильма не найден! id=9999"
-                ,assertThrows(RatingException.class, ()->
+        assertEquals("Рейтинг фильма не найден! id=9999",
+                assertThrows(RatingException.class, () ->
                         films.getMPA(9999)
                 ).getMessage());
 
 
-        assertEquals("Сбой запроса при добавлении рейтинга! Название \"G\" уже есть"
-                ,assertThrows(RatingException.class, ()->
+        assertEquals("Сбой запроса при добавлении рейтинга! Название \"G\" уже есть",
+                assertThrows(RatingException.class, () ->
                         films.addMPA("G")
                 ).getMessage());
 
@@ -167,7 +167,7 @@ class FilmUserDbStorageTest {
 
 
     @Test
-    void User() {
+    void user() {
 
         assertEquals(user[0],users.getUser(1),"найден пользователь 1");
         assertEquals(user[0],users.getUser(user[0]),"найден пользователь 1");
@@ -176,8 +176,8 @@ class FilmUserDbStorageTest {
         assertIterableEquals(List.of(user), users.getUsers(),"вернуть всех пользователей");
 
         users.removeUser(user[5]);
-        assertEquals("Пользователь не найден id = 6"
-                ,assertThrows(UserNotFoundException.class, ()->
+        assertEquals("Пользователь не найден id = 6",
+                assertThrows(UserNotFoundException.class, () ->
                         users.getUser(user[5])
                 ).getMessage());
 
@@ -194,8 +194,8 @@ class FilmUserDbStorageTest {
         assertEquals(4,users.addToFriends(1,4).getId(),
                 "Пользователь 1 подал заявку в друзья к пользователю 4");
 
-        assertEquals("Пользователь не найден id = 9999"
-                ,assertThrows(UserNotFoundException.class, ()->
+        assertEquals("Пользователь не найден id = 9999",
+                assertThrows(UserNotFoundException.class, () ->
                         users.addToFriends(9999,9998)
                 ).getMessage());
 
@@ -220,8 +220,8 @@ class FilmUserDbStorageTest {
 
 
         users.removeFromFriends(1,2);
-        assertEquals("Пользователи не в друзьях"
-                ,assertThrows(FriendException.class, ()->
+        assertEquals("Пользователи не в друзьях",
+                assertThrows(FriendException.class, () ->
                         users.removeFromFriends(1,2) //проверка, что было произведено удаление из друзей
                 ).getMessage());
 
