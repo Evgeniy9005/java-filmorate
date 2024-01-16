@@ -38,7 +38,7 @@ class UserControllerTest {
         //private User user1 = user.toBuilder().name("").build();
 
         private User user1 = User.builder()
-                .id(1)
+                .id(2)
                 .login("Login")
                 .email("email@mail.ru")
                 .name("")
@@ -47,6 +47,7 @@ class UserControllerTest {
 
         private User user2 = User
                 .builder()
+                .id(3)
                 .email("deadpool@email.ru")
                 .name("Уэйд")
                 .login("Deadpool")
@@ -70,10 +71,10 @@ class UserControllerTest {
                     .andExpect(jsonPath("$.name").value("Login"));
 
             mockMvc.perform(put("/users")
-                            .content(objectMapper.writeValueAsString(user1.toBuilder().name("name").build()))
+                            .content(objectMapper.writeValueAsString(user1.toBuilder().id(2).name("name").build()))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.id", Matchers.is(1)))
+                    .andExpect(jsonPath("$.id", Matchers.is(2)))
                     .andExpect(jsonPath("$.login").value("Login"))
                     .andExpect(jsonPath("$.email").value("email@mail.ru"))
                     .andExpect(jsonPath("$.name").value("name"))
@@ -87,12 +88,12 @@ class UserControllerTest {
                     .andExpect(jsonPath("$[0].id").value("1"))
                     .andExpect(jsonPath("$[1].id").value("2"))
                     .andExpect(jsonPath("$[2].id").value("3"))
-                    .andExpect(jsonPath("$[0].name").value("name"))
+                    .andExpect(jsonPath("$[0].name").value("Логан"))
                     .andExpect(jsonPath("$[0].birthday").value("2000-05-10"))
-                    .andExpect(jsonPath("$[0].login").value("Login"))
+                    .andExpect(jsonPath("$[0].login").value("Росомаха"))
                     .andExpect(jsonPath("$[2].name").value("Уэйд"))
                     .andExpect(jsonPath("$[2].email").value("deadpool@email.ru"))
-                    .andExpect(jsonPath("$[1].name").value("Login"));
+                    .andExpect(jsonPath("$[1].name").value("name"));
 
         }
 
