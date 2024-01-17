@@ -29,18 +29,6 @@ public class UserDbStorage implements UserStorage {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private int[]  argTypes  = new int[] {
-                Types.VARCHAR, //USER_EMAIL
-                Types.VARCHAR, //USER_LOGIN
-                Types.VARCHAR, //USER_NAME
-                Types.TIMESTAMP //USER_BIRTHDAY
-    };
-
-    /*public UserDbStorage(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }*/
-
-
     @Override
     public int addUser(User user) {
                String sql = "INSERT INTO PUBLIC.USERS (" +
@@ -69,19 +57,9 @@ public class UserDbStorage implements UserStorage {
             throw new UserException("Сбой запроса при добавлении фильма " + user,e.getMessage());
         }
 
-      // int row = jdbcTemplate.update(sql,args(user),argTypes);
         log.info("Добавлено количество строк = {}, при добавлении пользователя \"{}\" ",row,user);
 
         return (int) keyHolder.getKey();
-    }
-
-    private Object[] args(User user) {
-        return new Object[] {
-                user.getEmail(),
-                user.getLogin(),
-                user.getName(),
-                user.getBirthday()
-        };
     }
 
     @Override
@@ -237,7 +215,6 @@ public class UserDbStorage implements UserStorage {
         String sqlGetUser = "SELECT USER_ID, USER_EMAIL, USER_LOGIN, USER_NAME, USER_BIRTHDAY " +
                 "FROM PUBLIC.USERS WHERE USER_ID = ?;";
 
-
         User userWithoutFriends;
         try {
             userWithoutFriends = jdbcTemplate.queryForObject(sqlGetUser, (rs, rowNum) -> makeUser(rs),id);
@@ -256,6 +233,7 @@ public class UserDbStorage implements UserStorage {
         return user;
     }
 
+
      @Override
     public boolean isUser(int id) {
 
@@ -270,7 +248,6 @@ public class UserDbStorage implements UserStorage {
     }
 
 
-
     public User updateUser(User user) {
         int userId = user.getId();
 
@@ -283,8 +260,6 @@ public class UserDbStorage implements UserStorage {
                     "USER_BIRTHDAY=? " +
                     "WHERE USER_ID=?;",
                     user.getEmail(),user.getLogin(),user.getName(),user.getBirthday(),userId);
-
-          //  String sql = "UPDATE PUBLIC.FRIENDS SET USER_ID=0, FRIEND_ID=0, CHECK_FRIEND=FALSE WHERE FRIENDS_ID=0;";
 
         //обновить друзей
         Set<Integer> userFriends = user.getFriends();

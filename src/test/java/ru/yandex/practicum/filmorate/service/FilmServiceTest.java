@@ -48,14 +48,8 @@ class FilmServiceTest {
         userStorage.addUser(user);
         userStorage.addUser(user2);
         filmStorage.addFilm(film);
-        //Set<Integer> set = filmStorage.getLikes(1);
-        //set.add(3);
-        //set.add(4);
-        //int size = filmStorage.removeLike(1,set);
-        Film film = filmStorage.getFilm(1);
 
-        //filmService.up(film.toBuilder().rate(size).build());
-        //System.out.println(filmStorage.getLikes(1));
+        Film film = filmStorage.getFilm(1);
 
         System.out.println("   ." + filmService.getPopular(0));
 
