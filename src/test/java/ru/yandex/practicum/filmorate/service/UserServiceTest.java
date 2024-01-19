@@ -17,6 +17,7 @@ class UserServiceTest {
 
     UserService userService = new UserService(userStorage);
 
+
     private User user = User.builder()
             .id(1)
             .login("Росомаха")
@@ -62,4 +63,5 @@ class UserServiceTest {
     @Test
     void addToFriends() {
     }
+
 }

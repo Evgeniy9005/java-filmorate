@@ -10,7 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
+
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -23,23 +26,29 @@ class FilmControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     private ObjectMapper objectMapper;
 
 
     private Film film = Film.builder()
-            .id(1)
-            .name("Фильм")
-            .description("Описание")
-            .releaseDate(LocalDate.of(2000,10,1))
-            .duration(100)
-            .build();
+                .id(1)
+                .name("Фильм")
+                .description("Описание")
+                .releaseDate(LocalDate.of(2000,10,1))
+                .duration(100)
+                .rate(0)
+                .genres(new HashSet<>())
+                .mpa(new Mpa(1,"G"))
+                .build();
 
-    private Film film1 = film.toBuilder().name("Изменненное имя фильма").build();
+    private Film film1 = film.toBuilder().name("Измененное имя фильма").build();
 
     private Film film2 = Film.builder().name("Фильм1")
             .releaseDate(LocalDate.of(2001,10,1))
             .duration(30)
+            .mpa(new Mpa(1,"G"))
+            .genres(new HashSet<>())
             .build();
 
     @Test
@@ -61,7 +70,7 @@ class FilmControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath("$.name").value("Изменненное имя фильма"))
+                .andExpect(jsonPath("$.name").value("Измененное имя фильма"))
                 .andExpect(jsonPath("$.releaseDate",
                         Matchers.is(LocalDate.of(2000,10,1).toString())))
                 .andExpect(jsonPath("$.duration").value("100"))
@@ -75,7 +84,7 @@ class FilmControllerTest {
                 .andExpect(jsonPath("$[0].id").value("1"))
                 .andExpect(jsonPath("$[1].id").value("2"))
                 .andExpect(jsonPath("$[2].id").value("3"))
-                .andExpect(jsonPath("$[0].name").value("Изменненное имя фильма"))
+                .andExpect(jsonPath("$[0].name").value("Измененное имя фильма"))
                 .andExpect(jsonPath("$[0].releaseDate").value("2000-10-01"))
                 .andExpect(jsonPath("$[0].duration").value("100"))
                 .andExpect(jsonPath("$[0].description",Matchers.is("Описание")))

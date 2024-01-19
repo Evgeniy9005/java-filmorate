@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import lombok.*;
 import ru.yandex.practicum.filmorate.annotations.MinDate;
@@ -29,4 +30,8 @@ public class Film {
 
     @Builder.Default
     private final Integer rate = 0;
+
+    private final Set<Genre> genres;
+
+    private final Mpa mpa;
 }

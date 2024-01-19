@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.*;
 
@@ -37,6 +39,11 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     }
 
+    @Override
+    public int removeLike(int filmId, int userId) {
+    return 0;
+    }
+
 
     @Override
     public List<Film> getFilms() {
@@ -56,6 +63,10 @@ public class InMemoryFilmStorage implements FilmStorage {
         return filmMap.get(filmId);
     }
 
+    @Override
+    public Film updateFilm(Film film) {
+        return null;
+    }
 
 
     public Set<Integer> getLikes(int filmId) {
@@ -72,6 +83,40 @@ public class InMemoryFilmStorage implements FilmStorage {
         throw new FilmNotFoundException("Невозможно вернуть оценки!");
     }
 
+    @Override
+    public void likeFilm(Integer filmId, Integer userId) {
+
+    }
+
+    @Override
+    public Genre addGenre(String genre) {
+        return null;
+    }
+
+    @Override
+    public List<Genre> getGenres() {
+        return null;
+    }
+
+    @Override
+    public Genre getGenre(int genreId) {
+        return null;
+    }
+
+    @Override
+    public Mpa addMPA(String mpa) {
+        return null;
+    }
+
+    @Override
+    public List<Mpa> getAllMPA() {
+        return null;
+    }
+
+    @Override
+    public Mpa getMPA(int mpaId) {
+        return null;
+    }
 
 
     public int removeLike(int filmId, Set<Integer> setLikes) {
@@ -86,7 +131,6 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         throw new FilmNotFoundException("Невозможно удалить оценку!");
-
     }
 
 }

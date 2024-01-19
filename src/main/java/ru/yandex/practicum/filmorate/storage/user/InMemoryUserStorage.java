@@ -19,9 +19,10 @@ public class InMemoryUserStorage implements UserStorage {
     private static Set<Integer> idUsers = new HashSet<>();
 
     @Override
-    public void addUser(User user) {
+    public int addUser(User user) {
         idUsers.add(user.getId());
         userMap.put(user.getId(), user);
+        return user.getId();
     }
 
     public static boolean containsUser(int id) {
@@ -31,6 +32,26 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public boolean isUser(int id) {
         return userMap.containsKey(id);
+    }
+
+    @Override
+    public boolean iAgreeFriend(int userId, int friendId) {
+        return false;
+    }
+
+    @Override
+    public User addToFriends(int userId, int friendId) {
+        return null;
+    }
+
+    @Override
+    public void removeFromFriends(int userId, int friendId) {
+
+    }
+
+    @Override
+    public User updateUser(User user) {
+        return null;
     }
 
 

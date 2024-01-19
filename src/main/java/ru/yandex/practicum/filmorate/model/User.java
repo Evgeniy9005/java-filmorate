@@ -9,6 +9,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 public class User {
 
+
     private final Integer id;
 
     @Email
@@ -27,4 +28,5 @@ public class User {
 
     @Singular
     private final Set<Integer> friends;
+
 }

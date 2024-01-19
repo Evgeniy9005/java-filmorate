@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,14 +18,17 @@ class FilmTest {
     film = new Film(1,"Фильм",
             "Описание",
             LocalDate.of(2000,1,1),
-            100,0);
+            100,0, new HashSet<>(),new Mpa(1,"G"));
 
         film1 =  Film.builder()
                 .id(1)
                 .name("Фильм")
                 .description("Описание")
-                .releaseDate(LocalDate.of(2000, 1, 1))
+                .releaseDate(LocalDate.of(2000,1,1))
                 .duration(100)
+                .rate(0)
+                .genres(new HashSet<>())
+                .mpa(new Mpa(1,"G"))
                 .build();
     }
 
